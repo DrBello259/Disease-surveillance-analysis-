@@ -1,0 +1,55 @@
+# Load Necessary Libraries
+library(dplyr)  # For data manipulation
+library(ggplot2) # For visualization (optional)
+library(tidyr)   # For data tidying
+library(readr)   # For reading CSV files
+
+# Import the Dataset
+# Make sure to set the correct path to your dataset
+dataset <- read_csv("path/to/your/dataset.csv")
+
+#Explore the Data (Optional - For inspection)
+# This will give you an overview of the first few rows of the dataset
+head(dataset)
+
+# Check the structure of the dataset (column types, missing values)
+str(dataset)
+
+#Summary statistics for the dataset
+summary(dataset)
+
+#Clean the Data
+
+## Handle Missing Values
+# You can choose to remove rows with missing values or fill them with a method (mean, median, etc.)
+# Example of removing rows with missing values:
+dataset_cleaned <- dataset %>%
+  drop_na()  # Or use other methods like fill()
+
+# Example of replacing missing values with the mean of the column:
+dataset_cleaned$column_name <- ifelse(is.na(dataset_cleaned$column_name), 
+                                      mean(dataset_cleaned$column_name, na.rm = TRUE), 
+                                      dataset_cleaned$column_name)
+
+## Remove Duplicates
+dataset_cleaned <- dataset_cleaned %>%
+  distinct()
+
+# Data Transformation (Optional)
+# This can be specific to your dataset and analysis needs
+# Example: converting a categorical variable to a factor
+dataset_cleaned$category_column <- as.factor(dataset_cleaned$category_column)
+
+#Save the Cleaned Dataset
+# Save the cleaned dataset to a new CSV file
+write_csv(dataset_cleaned, "path/to/save/cleaned_dataset.csv")
+
+#Optional: Data Visualization (For Exploration)
+# Example: creating a histogram of a numerical variable
+ggplot(dataset_cleaned, aes(x = column_name)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black", alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Distribution of Column Name", x = "Value", y = "Frequency")
+
+
+
